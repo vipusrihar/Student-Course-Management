@@ -3,6 +3,7 @@ package com.vipusa.management.repository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.vipusa.management.exception.FirebaseOperationException;
+import com.vipusa.management.exception.ResourceAlreadyExistsException;
 import com.vipusa.management.exception.ResourceNotFoundException;
 import com.vipusa.management.model.Course;
 import org.springframework.stereotype.Repository;
@@ -38,13 +39,14 @@ public class CourseRepository {
     public Course saveIfNotExists(Course course) {
         try {
             Query query = firestore.collection(COLLECTION_NAME)
-                    .whereEqualTo("name", course.getName());
+                    .whereEqualTo("name", course.getName())
+                    .whereEqualTo("lecturerName", course.getLecturerName());
             ApiFuture<QuerySnapshot> querySnapshot = query.get();
             List<QueryDocumentSnapshot> docs = querySnapshot.get().getDocuments();
 
             if (!docs.isEmpty()) {
-                // return existing
-                return docs.get(0).toObject(Course.class);
+                throw new ResourceAlreadyExistsException("Course Already exists with course name "
+                        + course.getName()+ " with the lecture "+course.getLecturerName());
             }
 
             // else create new
