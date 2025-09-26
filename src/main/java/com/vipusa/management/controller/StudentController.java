@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
-    @PostMapping
+    @PostMapping("/student")
     public ResponseEntity<ApiResponse<Student>> createStudent(@Valid @RequestBody StudentRequest request){
         Student student = studentService.createStudent(request);
         ApiResponse<Student> response = ApiResponse.<Student>builder()
@@ -31,7 +31,7 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/student/{id}")
     public ResponseEntity<ApiResponse<Student>> getStudent(@PathVariable String id) {
         Student student = studentService.getStudentById(id);
         ApiResponse<Student> response = ApiResponse.<Student>builder()
@@ -42,7 +42,7 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping("/students")
     public ResponseEntity<ApiResponse<List<Student>>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();
         ApiResponse<List<Student>> response = ApiResponse.<List<Student>>builder()
@@ -53,7 +53,7 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/student/{id}")
     public ResponseEntity<ApiResponse<Student>> updateStudent(@PathVariable String id,
                                                               @Valid @RequestBody StudentRequest request) {
         Student student = studentService.updateStudent(id, request);
@@ -65,7 +65,7 @@ public class StudentController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/student/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteStudent(@PathVariable String id) {
         studentService.deleteStudent(id);
         ApiResponse<Void> response = ApiResponse.<Void>builder()

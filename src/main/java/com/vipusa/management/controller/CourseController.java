@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
-@RequestMapping("/api/courses")
+@RequestMapping("")
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
-    @PostMapping
+    @PostMapping("/course")
     public ResponseEntity<ApiResponse<Course>> createCourse(@Valid @RequestBody CourseRequest request) {
         Course course = courseService.createCourse(request);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
@@ -31,7 +31,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/course/{id}")
     public ResponseEntity<ApiResponse<Course>> getCourse(@PathVariable String id) {
         Course course = courseService.getCourseById(id);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
@@ -42,7 +42,7 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping("/courses")
     public ResponseEntity<ApiResponse<List<Course>>> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
         ApiResponse<List<Course>> response = ApiResponse.<List<Course>>builder()
@@ -53,7 +53,7 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/course/{id}")
     public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable String id,
                                                             @Valid @RequestBody CourseRequest request) {
         Course course = courseService.updateCourse(id, request);
@@ -65,7 +65,7 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/course/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable String id) {
         courseService.deleteCourse(id);
         ApiResponse<Void> response = ApiResponse.<Void>builder()
