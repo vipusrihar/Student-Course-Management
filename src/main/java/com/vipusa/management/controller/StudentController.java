@@ -2,6 +2,7 @@ package com.vipusa.management.controller;
 
 import com.vipusa.management.model.Student;
 import com.vipusa.management.request.StudentRequest;
+import com.vipusa.management.request.StudentUpdateRequest;
 import com.vipusa.management.response.ApiResponse;
 import com.vipusa.management.service.StudentService;
 import jakarta.validation.Valid;
@@ -55,7 +56,7 @@ public class StudentController {
 
     @PutMapping("/student/{id}")
     public ResponseEntity<ApiResponse<Student>> updateStudent(@PathVariable String id,
-                                                              @Valid @RequestBody StudentRequest request) {
+                                                              @Valid @RequestBody StudentUpdateRequest request) {
         Student student = studentService.updateStudent(id, request);
         ApiResponse<Student> response = ApiResponse.<Student>builder()
                 .success(true)
