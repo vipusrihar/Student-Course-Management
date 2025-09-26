@@ -2,6 +2,7 @@ package com.vipusa.management.controller;
 
 import com.vipusa.management.model.Course;
 import com.vipusa.management.request.CourseRequest;
+import com.vipusa.management.request.CourseUpdateRequest;
 import com.vipusa.management.response.ApiResponse;
 import com.vipusa.management.service.CourseService;
 import jakarta.validation.Valid;
@@ -55,7 +56,7 @@ public class CourseController {
 
     @PutMapping("/course/{id}")
     public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable String id,
-                                                            @Valid @RequestBody CourseRequest request) {
+                                                            @Valid @RequestBody CourseUpdateRequest request) {
         Course course = courseService.updateCourse(id, request);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
                 .success(true)

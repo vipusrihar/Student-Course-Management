@@ -1,11 +1,10 @@
 package com.vipusa.management.serviceImpl;
 
-import com.vipusa.management.exception.ResourceNotFoundException;
 import com.vipusa.management.model.Course;
 import com.vipusa.management.repository.CourseRepository;
 import com.vipusa.management.request.CourseRequest;
+import com.vipusa.management.request.CourseUpdateRequest;
 import com.vipusa.management.service.CourseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,69 +12,58 @@ import java.util.List;
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
+
+    public CourseServiceImpl(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
     @Override
     public Course createCourse(CourseRequest request) {
-        try {
-            Course course = new Course();
-            course.setName(request.getName());
-            course.setFee(request.getFee());
-            course.setLecturerId(request.getLecturerId());
-            course.setLecturerName(request.getLecturerName());
-
-            return courseRepository.save(course);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create course", e);
-        }
+        Course course = new Course();
+        course.setName(request.getName());
+        course.setFee(request.getFee());
+        course.setLecturerId(request.getLecturerId());
+        course.setLecturerName(request.getLecturerName());
+        return courseRepository.saveIfNotExists(course);
     }
 
     @Override
     public Course getCourseById(String id) {
-        try {
-            Course course = courseRepository.findById(id);
-            if (course == null) {
-                throw new ResourceNotFoundException("Course not found with id: " + id);
-            }
-            return course;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get course", e);
-        }
+        return courseRepository.findById(id);
     }
 
     @Override
     public List<Course> getAllCourses() {
-        try {
-            return courseRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to get all courses", e);
-        }
+        return courseRepository.findAll();
     }
 
     @Override
-    public Course updateCourse(String id, CourseRequest request) {
-        try {
-            Course existingCourse = getCourseById(id);
+    public Course updateCourse(String id, CourseUpdateRequest request) {
+        Course course = getCourseById(id);
 
-            existingCourse.setName(request.getName());
-            existingCourse.setFee(request.getFee());
-            existingCourse.setLecturerId(request.getLecturerId());
-            existingCourse.setLecturerName(request.getLecturerName());
-
-            return courseRepository.update(existingCourse);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update course", e);
+        if (request.getName() != null && !request.getName().isBlank()) {
+            course.setName(request.getName());
         }
+
+        if (request.getFee() != null) {
+            course.setFee(request.getFee());
+        }
+
+        if (request.getLecturerName() != null && !request.getLecturerName().isBlank()) {
+            course.setLecturerName(request.getLecturerName());
+        }
+
+        if (request.getLecturerId() != null && !request.getLecturerId().isBlank()) {
+            course.setLecturerId(request.getLecturerId());
+        }
+
+        return courseRepository.saveOrUpdate(course);
     }
 
     @Override
     public void deleteCourse(String id) {
-        try {
-            getCourseById(id);
-            courseRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete course", e);
-        }
+        getCourseById(id);
+        courseRepository.deleteById(id);
     }
 }

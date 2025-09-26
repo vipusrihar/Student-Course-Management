@@ -2,8 +2,9 @@ package com.vipusa.management.repository;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.vipusa.management.exception.FirebaseOperationException;
+import com.vipusa.management.exception.ResourceNotFoundException;
 import com.vipusa.management.model.Course;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,49 +15,79 @@ import java.util.concurrent.ExecutionException;
 public class CourseRepository {
 
     private static final String COLLECTION_NAME = "courses";
+    private final Firestore firestore;
 
-    @Autowired
-    private Firestore firestore;
-
-    public Course save(Course course) throws ExecutionException, InterruptedException {
-        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document();
-        course.setId(docRef.getId());
-        ApiFuture<WriteResult> result = docRef.set(course);
-        result.get();
-        return course;
+    public CourseRepository(Firestore firestore) {
+        this.firestore = firestore;
     }
 
-    public Course findById(String id) throws ExecutionException, InterruptedException {
-        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(id);
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
-
-        if (document.exists()) {
-            return document.toObject(Course.class);
+    public Course saveOrUpdate(Course course) {
+        try {
+            if (course.getId() == null || course.getId().isEmpty()) {
+                // generate new ID for new course
+                course.setId(firestore.collection(COLLECTION_NAME).document().getId());
+            }
+            firestore.collection(COLLECTION_NAME).document(course.getId()).set(course).get();
+            return course;
+        } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FirebaseOperationException("Failed to save or update course", e);
         }
-        return null;
     }
 
-    public List<Course> findAll() throws ExecutionException, InterruptedException {
-        List<Course> courses = new ArrayList<>();
-        ApiFuture<QuerySnapshot> future = firestore.collection(COLLECTION_NAME).get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+    public Course saveIfNotExists(Course course) {
+        try {
+            Query query = firestore.collection(COLLECTION_NAME)
+                    .whereEqualTo("name", course.getName());
+            ApiFuture<QuerySnapshot> querySnapshot = query.get();
+            List<QueryDocumentSnapshot> docs = querySnapshot.get().getDocuments();
 
-        for (QueryDocumentSnapshot document : documents) {
-            courses.add(document.toObject(Course.class));
+            if (!docs.isEmpty()) {
+                // return existing
+                return docs.get(0).toObject(Course.class);
+            }
+
+            // else create new
+            return saveOrUpdate(course);
+        } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FirebaseOperationException("Failed to save course", e);
         }
-        return courses;
     }
 
-    public Course update(Course course) throws ExecutionException, InterruptedException {
-        DocumentReference docRef = firestore.collection(COLLECTION_NAME).document(course.getId());
-        ApiFuture<WriteResult> result = docRef.set(course);
-        result.get();
-        return course;
+    public Course findById(String id) {
+        try {
+            DocumentSnapshot doc = firestore.collection(COLLECTION_NAME).document(id).get().get();
+            if (!doc.exists()) {
+                throw new ResourceNotFoundException("Course not found with id: " + id);
+            }
+            return doc.toObject(Course.class);
+        } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FirebaseOperationException("Failed to fetch course", e);
+        }
     }
 
-    public void deleteById(String id) throws ExecutionException, InterruptedException {
-        ApiFuture<WriteResult> result = firestore.collection(COLLECTION_NAME).document(id).delete();
-        result.get();
+    public List<Course> findAll() {
+        try {
+            List<Course> courses = new ArrayList<>();
+            List<QueryDocumentSnapshot> docs = firestore.collection(COLLECTION_NAME).get().get().getDocuments();
+            for (DocumentSnapshot doc : docs) {
+                courses.add(doc.toObject(Course.class));
+            }
+            return courses;
+        } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FirebaseOperationException("Failed to fetch all courses", e);
+        }
+    }
+
+    public void deleteById(String id) {
+        try {
+            firestore.collection(COLLECTION_NAME).document(id).delete().get();
+        } catch (ExecutionException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new FirebaseOperationException("Failed to delete course", e);
+        }
     }
 }
