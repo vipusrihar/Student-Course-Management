@@ -4,8 +4,6 @@ import com.vipusa.management.model.Course;
 import com.vipusa.management.request.CourseRequest;
 import com.vipusa.management.response.ApiResponse;
 import com.vipusa.management.service.CourseService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,19 +15,16 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/courses")
-@Tag(name = "Course Management", description = "APIs for managing courses")
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
 
     @PostMapping
-    @Operation(summary = "Create a new course")
-    public ResponseEntity<ApiResponse<Course>> createCourse(@Valid @RequestBody CourseRequest request)
-            throws ExecutionException, InterruptedException {
+    public ResponseEntity<ApiResponse<Course>> createCourse(@Valid @RequestBody CourseRequest request) {
         Course course = courseService.createCourse(request);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
-                .isSuccess(true)
+                .success(true)
                 .message("Course created successfully")
                 .response(course)
                 .build();
@@ -37,12 +32,10 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get course by ID")
-    public ResponseEntity<ApiResponse<Course>> getCourse(@PathVariable String id)
-            throws ExecutionException, InterruptedException {
+    public ResponseEntity<ApiResponse<Course>> getCourse(@PathVariable String id) {
         Course course = courseService.getCourseById(id);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
-                .isSuccess(true)
+                .success(true)
                 .message("Course retrieved successfully")
                 .response(course)
                 .build();
@@ -50,12 +43,10 @@ public class CourseController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all courses")
-    public ResponseEntity<ApiResponse<List<Course>>> getAllCourses()
-            throws ExecutionException, InterruptedException {
+    public ResponseEntity<ApiResponse<List<Course>>> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
         ApiResponse<List<Course>> response = ApiResponse.<List<Course>>builder()
-                .isSuccess(true)
+                .success(true)
                 .message("Courses retrieved successfully")
                 .response(courses)
                 .build();
@@ -63,13 +54,11 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update course")
     public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable String id,
-                                                            @Valid @RequestBody CourseRequest request)
-            throws ExecutionException, InterruptedException {
+                                                            @Valid @RequestBody CourseRequest request) {
         Course course = courseService.updateCourse(id, request);
         ApiResponse<Course> response = ApiResponse.<Course>builder()
-                .isSuccess(true)
+                .success(true)
                 .message("Course updated successfully")
                 .response(course)
                 .build();
@@ -77,12 +66,10 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete course by ID")
-    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable String id)
-            throws ExecutionException, InterruptedException {
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable String id) {
         courseService.deleteCourse(id);
         ApiResponse<Void> response = ApiResponse.<Void>builder()
-                .isSuccess(true)
+                .success(true)
                 .message("Course deleted successfully")
                 .response(null)
                 .build();

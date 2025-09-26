@@ -9,9 +9,10 @@ import lombok.*;
 @Builder
 public class ApiResponse<T>{
 
-    private boolean isSuccess;
+    private boolean success;
 
     private  String message;
 
     private T response;
 }
+

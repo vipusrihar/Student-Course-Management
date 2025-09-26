@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handleResourceNotFound(ResourceNotFoundException ex) {
         ApiResponse<Object> error = ApiResponse.builder()
-                .isSuccess(false)
+                .success(false)
                 .message(ex.getMessage())
                 .response(null)
                 .build();
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
         ApiResponse<Object> error = ApiResponse.builder()
-                .isSuccess(false)
+                .success(false)
                 .message("An error occurred: " + ex.getMessage())
                 .response(null)
                 .build();

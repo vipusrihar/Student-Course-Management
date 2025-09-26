@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -17,42 +16,66 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public Course createCourse(CourseRequest request) throws ExecutionException, InterruptedException {
-        Course course = new Course();
-        course.setName(request.getName());
-        course.setFee(request.getFee());
-        course.setLecturerId(request.getLecturerId());
-        course.setLecturerName(request.getLecturerName());
+    @Override
+    public Course createCourse(CourseRequest request) {
+        try {
+            Course course = new Course();
+            course.setName(request.getName());
+            course.setFee(request.getFee());
+            course.setLecturerId(request.getLecturerId());
+            course.setLecturerName(request.getLecturerName());
 
-        return courseRepository.save(course);
-    }
-
-    public Course getCourseById(String id) throws ExecutionException, InterruptedException {
-        Course course = courseRepository.findById(id);
-        if (course == null) {
-            throw new ResourceNotFoundException("Course not found with id: " + id);
+            return courseRepository.save(course);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create course", e);
         }
-        return course;
     }
 
-    public List<Course> getAllCourses() throws ExecutionException, InterruptedException {
-        return courseRepository.findAll();
+    @Override
+    public Course getCourseById(String id) {
+        try {
+            Course course = courseRepository.findById(id);
+            if (course == null) {
+                throw new ResourceNotFoundException("Course not found with id: " + id);
+            }
+            return course;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get course", e);
+        }
     }
 
-    public Course updateCourse(String id, CourseRequest request) throws ExecutionException, InterruptedException {
-        Course existingCourse = getCourseById(id);
-
-        existingCourse.setName(request.getName());
-        existingCourse.setFee(request.getFee());
-        existingCourse.setLecturerId(request.getLecturerId());
-        existingCourse.setLecturerName(request.getLecturerName());
-
-        return courseRepository.update(existingCourse);
+    @Override
+    public List<Course> getAllCourses() {
+        try {
+            return courseRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get all courses", e);
+        }
     }
 
-    public void deleteCourse(String id) throws ExecutionException, InterruptedException {
-        // Check if course exists
-        getCourseById(id);
-        courseRepository.deleteById(id);
+    @Override
+    public Course updateCourse(String id, CourseRequest request) {
+        try {
+            Course existingCourse = getCourseById(id);
+
+            existingCourse.setName(request.getName());
+            existingCourse.setFee(request.getFee());
+            existingCourse.setLecturerId(request.getLecturerId());
+            existingCourse.setLecturerName(request.getLecturerName());
+
+            return courseRepository.update(existingCourse);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update course", e);
+        }
+    }
+
+    @Override
+    public void deleteCourse(String id) {
+        try {
+            getCourseById(id);
+            courseRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete course", e);
+        }
     }
 }

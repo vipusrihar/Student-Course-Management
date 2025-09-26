@@ -8,20 +8,15 @@ import java.util.concurrent.ExecutionException;
 
 public interface StudentService {
 
-    public Student createStudent(StudentRequest request)
-            throws ExecutionException, InterruptedException;
+    public Student createStudent(StudentRequest request);
 
-    public Student getStudentById(String id)
-            throws ExecutionException, InterruptedException;
+    public Student getStudentById(String id);
 
-    public List<Student> getAllStudents()
-            throws ExecutionException, InterruptedException ;
+    public List<Student> getAllStudents();
 
-    public Student updateStudent(String id, StudentRequest request)
-            throws ExecutionException, InterruptedException;
+    public Student updateStudent(String id, StudentRequest request);
 
-    public void deleteStudent(String id)
-            throws ExecutionException, InterruptedException;
+    public void deleteStudent(String id);
 
 
 }

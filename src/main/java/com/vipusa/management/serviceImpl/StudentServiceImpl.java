@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -17,43 +16,68 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public Student createStudent(StudentRequest request) throws ExecutionException, InterruptedException {
-        Student student = new Student();
-        student.setTitle(request.getTitle());
-        student.setName(request.getName());
-        student.setAddress(request.getAddress());
-        student.setCity(request.getCity());
-        student.setCourseId(request.getCourseId());
+    @Override
+    public Student createStudent(StudentRequest request) {
+        try {
+            Student student = new Student();
+            student.setTitle(request.getTitle());
+            student.setName(request.getName());
+            student.setAddress(request.getAddress());
+            student.setCity(request.getCity());
+            student.setCourseId(request.getCourseId());
 
-        return studentRepository.save(student);
-    }
-
-    public Student getStudentById(String id) throws ExecutionException, InterruptedException {
-        Student student = studentRepository.findById(id);
-        if (student == null) {
-            throw new ResourceNotFoundException("Student not found with id: " + id);
+            return studentRepository.save(student);
+        } catch (Exception e) { // catch ExecutionException / InterruptedException here
+            throw new RuntimeException("Failed to create student", e);
         }
-        return student;
     }
 
-    public List<Student> getAllStudents() throws ExecutionException, InterruptedException {
-        return studentRepository.findAll();
+    @Override
+    public Student getStudentById(String id) {
+        try {
+            Student student = studentRepository.findById(id);
+            if (student == null) {
+                throw new ResourceNotFoundException("Student not found with id: " + id);
+            }
+            return student;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get student", e);
+        }
     }
 
-    public Student updateStudent(String id, StudentRequest request) throws ExecutionException, InterruptedException {
-        Student existingStudent = getStudentById(id);
-
-        existingStudent.setTitle(request.getTitle());
-        existingStudent.setName(request.getName());
-        existingStudent.setAddress(request.getAddress());
-        existingStudent.setCity(request.getCity());
-        existingStudent.setCourseId(request.getCourseId());
-
-        return studentRepository.update(existingStudent);
+    @Override
+    public List<Student> getAllStudents() {
+        try {
+            return studentRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get all students", e);
+        }
     }
 
-    public void deleteStudent(String id) throws ExecutionException, InterruptedException {
-        getStudentById(id);
-        studentRepository.deleteById(id);
+    @Override
+    public Student updateStudent(String id, StudentRequest request) {
+        try {
+            Student existingStudent = getStudentById(id);
+
+            existingStudent.setTitle(request.getTitle());
+            existingStudent.setName(request.getName());
+            existingStudent.setAddress(request.getAddress());
+            existingStudent.setCity(request.getCity());
+            existingStudent.setCourseId(request.getCourseId());
+
+            return studentRepository.update(existingStudent);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update student", e);
+        }
+    }
+
+    @Override
+    public void deleteStudent(String id) {
+        try {
+            getStudentById(id); // will throw ResourceNotFoundException if not found
+            studentRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete student", e);
+        }
     }
 }
