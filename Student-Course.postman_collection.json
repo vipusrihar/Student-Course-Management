@@ -1,0 +1,337 @@
+{
+	"info": {
+		"_postman_id": "3a0ffa5a-23f0-4d87-9693-6472e81bdc08",
+		"name": "Student-Course",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43316064"
+	},
+	"item": [
+		{
+			"name": "students",
+			"item": [
+				{
+					"name": "getAllStudents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/students",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createStudent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mrss\",\r\n  \"name\": \"Luxmy Sriharan\",\r\n  \"address\": \"Thoddilady\",\r\n  \"city\": \"Jaffna\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/student",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getStudentById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mr\",\r\n  \"name\": \"John Doe\",\r\n  \"address\": \"123 Main Street\",\r\n  \"city\": \"Colombo\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/student/19Pqyx3wmfpzd51UfSbA",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"student",
+								"19Pqyx3wmfpzd51UfSbA"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateStudent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mr\",\r\n  \"name\": \"John Doe\",\r\n  \"address\": \"Colombo Street\",\r\n  \"city\": \"Colombo\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/student/jcnPWdq9L8RYZOGsxcM6",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"student",
+								"jcnPWdq9L8RYZOGsxcM6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteStudent",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mr\",\r\n  \"name\": \"John Doe\",\r\n  \"address\": \"123 Main Street\",\r\n  \"city\": \"Colombo\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/student/jcnPWdq9L8RYZOGsxcM6",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"student",
+								"jcnPWdq9L8RYZOGsxcM6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "courses",
+			"item": [
+				{
+					"name": "create Courses",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Introduction to JavaScript\",\r\n  \"fee\": 2500.0,\r\n  \"lecturerId\": \"L003\",\r\n  \"lecturerName\": \"Dr. Isara \"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/course",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllCourses",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Mr\",\r\n  \"name\": \"John Doe\",\r\n  \"address\": \"123 Main Street\",\r\n  \"city\": \"Colombo\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/courses",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"courses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCourseById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Introduction to Computer Science\",\r\n  \"fee\": 2500.0,\r\n  \"lecturerId\": \"L001\",\r\n  \"lecturerName\": \"Dr. Smith\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/CSSefpBtdfSo36xLJV7O",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"CSSefpBtdfSo36xLJV7O"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCourse",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Introduction to C\",\r\n  \"fee\": 2500.0,\r\n  \"lecturerId\": \"L005\",\r\n  \"lecturerName\": \"Dr. Nalin\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/CSSefpBtdfSo36xLJV7O",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"CSSefpBtdfSo36xLJV7O"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCoursebyId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Miss\",\r\n  \"name\": \"Vipusa Sriharan\",\r\n  \"address\": \"Thoddilady\",\r\n  \"city\": \"Jaffna\",\r\n  \"courseId\": \"CSE101\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{baseURL}}/course/fwgwsgws",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"course",
+								"fwgwsgws"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"testuser\",\r\n    \"password\": \"testpass\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTc1ODk0MTA2MiwiZXhwIjoxNzU4OTQ0NjYyfQ.HabGBtWL1pkkTIHuDM0V_6BkSO9kZdpZn4jTQS4qv-g",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		}
+	]
+}
