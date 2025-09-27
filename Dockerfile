@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy the built JAR from target
 COPY target/management-0.0.1.jar app.jar
 
-# Expose the port your Spring Boot app uses
 EXPOSE 8080
 
 # Run the Spring Boot application
